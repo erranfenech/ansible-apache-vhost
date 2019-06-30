@@ -1,0 +1,41 @@
+---
+  - name: install virtual host
+    template: src=virtualhost80.php.j2 dest=/etc/httpd/conf.d/{{ domainname }}.conf
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    notify: 
+      - reload httpd
+    tags: 
+       - create-vhost
+
+  - name: install virtual host
+    template: src=virtualhost80.php.j2 dest=/etc/apache2/sites-available/{{ domainname }}.conf
+    when: ansible_os_family == "Debian"
+    notify:
+      - reload apache
+    tags: 
+       - create-vhost
+
+  - name: Enable virtual host
+    command: a2ensite {{ domainname }}.conf
+             creates=/etc/apache2/sites-enabled/{{ domainname }}.conf
+    when: ansible_os_family == "Debian"
+
+  - name: create directory
+    file: path={{ documentroot }} owner={{ owner }} group={{ group }} state=directory
+
+  - name: add index.html
+    template: src=index.html dest={{ documentroot }}
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_os_family == "Debian"
+    tags:
+       - create-vhost
+
+
+  - name: insert iptables rule
+    lineinfile: dest=/etc/sysconfig/iptables state=present regexp="{{ service_port_apache }}"
+                insertafter="^:OUTPUT " line="-A INPUT -p tcp  --dport {{ service_port_apache }} -j  ACCEPT"
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    notify: restart iptables
+
+  - name: insert ufw rule
+    ufw: rule=allow port="{{ service_port_apache }}" proto=tcp
+    when: ansible_distribution == 'Ubuntu'

@@ -1,0 +1,30 @@
+---
+# Website Variables
+#  vars_prompt:
+#  - name: "domainname"
+#    prompt: "Enter Name of Domain"
+#    private: no
+#
+#  - name: "documentroot"
+#    prompt: "Enter DocumentRoot"
+
+#    domainname: dogtime.com
+#    documentroot: /var/www/vhost/dogtime.com
+
+# File system Variables
+owner: root
+group: root
+
+# Service Variables
+service_port_ssh: 22
+service_port_ftp: 21
+service_port_apache: 80
+service_port_mysql: 3306
+service_port_webmin: 10000
+
+# lsyncd Variables
+lsyncdsource: "/var/www/mydomain.com/"
+lsyncdtargetip: 10.179.67.237
+lsyncdtargetdir: "/var/www/mydomain.com"
+
+

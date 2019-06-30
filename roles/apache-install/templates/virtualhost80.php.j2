@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+	ServerName {{ domainname }}
+	ServerAlias www.{{ domainname }}
+	DocumentRoot {{ documentroot }}
+	<Directory {{ documentroot }}>
+		AllowOverride All
+	</Directory>		
+    	ErrorLog logs/{{ domainame }}-error_log
+    	CustomLog logs/{{ domainame }}-access_log common
+</VirtualHost>
+

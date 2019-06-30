@@ -1,0 +1,6 @@
+---
+  - name: install apache2
+    apt: name=apache2 state=present update_cache=yes
+    notify: 
+      - restart apache
+

@@ -1,0 +1,8 @@
+---
+  - name: install httpd
+    yum: name=httpd state=present
+    notify: 
+      - restart apache
+
+#  - name: start httpd service
+#    action: service name=httpd state=started enabled=yes

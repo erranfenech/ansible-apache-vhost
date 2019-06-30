@@ -1,0 +1,33 @@
+---
+##############Centos##################
+
+- name: restart apache
+  include: ../handlers/httpd.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  tags:
+     - install-apache
+
+- name: reload apache
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  include: ../handlers/httpd.yml
+  tags:
+     - create-vhost
+
+##############Ubuntu##################
+
+- name: restart apache
+  include: ../handlers/httpd.yml
+  when: ansible_os_family == "Debian"
+  tags:
+     - install-apache
+
+- name: reload apache
+  when: ansible_os_family == "Debian"
+  include: ../handlers/httpd.yml
+  tags:
+     - create-vhost
+
+######################################
+
+- name: restart iptables
+  service: name=iptables state=restarted

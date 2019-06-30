@@ -1,0 +1,4 @@
+---
+- name: Install Mysql package
+  yum: pkg=mysql-server state=present
+   

@@ -1,0 +1,33 @@
+---
+#  - name: install httpd
+#    include: httpd.yml
+#    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' 
+#    tags:
+#       - install-apache
+
+#  - name: install apache2
+#    include: apache2.yml
+#    when: ansible_os_family == "Debian"
+#    tags:
+#       - install-apache
+
+
+  - name: install httpd
+    yum: name=httpd state=present 
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
+    tags:
+       - install-apache
+#    notify: 
+#      - restart httpd
+
+  - name: start httpd service and enable to start at boot time
+    action: service name=httpd state=started enabled=yes
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
+
+  - name: install apache2
+    apt: name=apache2 state=present update_cache=yes
+    when: ansible_os_family == "Debian"
+    tags:
+       - install-apache
+    notify: 
+      - restart apache

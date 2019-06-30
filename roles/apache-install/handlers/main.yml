@@ -1,0 +1,44 @@
+---
+#- name: restart apache
+#  include: httpd.yml
+#  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' 
+#  tags:
+#     - install-apache
+
+#- name: restart apache
+#  include: apache2.yml
+#  when: ansible_os_family == "Debian"
+#  tags:
+#     - install-apache
+
+#################CentOS##################
+- name: start httpd service
+  action: service name=httpd state=started enabled=yes
+
+
+- name: restart httpd
+  service: name=httpd state=restarted
+#  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  tags:
+     - install-apache
+
+- name: reload httpd
+  service: name=httpd state=reloaded
+#  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  tags:
+     - install-apache
+
+################Debian###################
+
+- name: restart apache
+  service: name=apache2 state=restarted
+#  when: ansible_os_family == "Debian"
+  tags:
+     - install-apache
+
+- name: reload apache
+  service: name=apache2 state=reloaded
+#  when: ansible_os_family == "Debian"
+  tags:
+     - install-apache
+

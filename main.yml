@@ -1,0 +1,20 @@
+---
+- hosts: all
+  roles: 
+    - apache-install
+  tags: 
+     - install-apache
+
+  roles:
+    - apache-virtualhost80
+  tags:
+     - create-vhost
+
+  vars_prompt:
+    - name: "domainname"
+      prompt: "Name of Domain"
+      private: no
+  
+    - name: "documentroot"
+      prompt: "DocumentRoot"
+      private: no

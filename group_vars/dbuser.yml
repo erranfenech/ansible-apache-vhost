@@ -1,0 +1,19 @@
+---
+ - name: Create Application Database
+   mysql_db: name={{ dbname }} state=present
+
+ - name: Create Application DB User
+   mysql_user: name={{ dbuser }} password={{ upassword }}
+   	       priv=*.*:ALL host='%' state=present
+
+- name: Install and start apache
+  hosts: name={{ serverip }}
+  user: name={{ loginuser }}
+
+  tasks:
+
+ - name: install httpd
+   yum: name=httpd state=present
+
+ - name: start httpd
+   service: name=httpd state=running
