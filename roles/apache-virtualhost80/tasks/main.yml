@@ -33,9 +33,18 @@
   - name: insert iptables rule
     lineinfile: dest=/etc/sysconfig/iptables state=present regexp="{{ service_port_apache }}"
                 insertafter="^:OUTPUT " line="-A INPUT -p tcp  --dport {{ service_port_apache }} -j  ACCEPT"
-    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    when: ansible_distribution == 'CentOS' and ansible_distribution_version|version_compare(7, '<') or ansible_distribution == 'Red Hat Enterprise Linux' and ansible_distribution_version|version_compare(7, '<')
     notify: restart iptables
-
+    
+  - name: insert firewalld rule
+      firewalld: 
+        permanent: yes
+        immediate: yes
+        state: enabled
+        port: "{{ service_port_apache }}/tcp" 
+        zone: public
+      when: ansible_distribution == 'CentOS' and ansible_distribution_version|version_compare(7, '>=') or ansible_distribution == 'Red Hat Enterprise Linux' and ansible_distribution_version|version_compare(7, '>=')
+   
   - name: insert ufw rule
     ufw: rule=allow port="{{ service_port_apache }}" proto=tcp
     when: ansible_distribution == 'Ubuntu'
