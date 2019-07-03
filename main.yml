@@ -1,14 +1,8 @@
 ---
 - hosts: all
-  roles: 
-    - apache-install
-  tags: 
-     - install-apache
-
   roles:
-    - apache-virtualhost80
-  tags:
-     - create-vhost
+    - {role: apache-install, tags: install-apache}
+    - {role: apache-virtualhost80, tags: create-vhost}
 
   vars_prompt:
     - name: "domainname"

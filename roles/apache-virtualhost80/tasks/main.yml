@@ -37,13 +37,13 @@
     notify: restart iptables
     
   - name: insert firewalld rule
-      firewalld: 
-        permanent: yes
-        immediate: yes
-        state: enabled
-        port: "{{ service_port_apache }}/tcp" 
-        zone: public
-      when: ansible_distribution == 'CentOS' and ansible_distribution_version|version_compare(7, '>=') or ansible_distribution == 'Red Hat Enterprise Linux' and ansible_distribution_version|version_compare(7, '>=')
+    firewalld: 
+      permanent: yes
+      immediate: yes
+      state: enabled
+      port: "{{ service_port_apache }}/tcp" 
+      zone: public
+    when: ansible_distribution == 'CentOS' and ansible_distribution_version|version_compare(7, '>=') or ansible_distribution == 'Red Hat Enterprise Linux' and ansible_distribution_version|version_compare(7, '>=')
    
   - name: insert ufw rule
     ufw: rule=allow port="{{ service_port_apache }}" proto=tcp
